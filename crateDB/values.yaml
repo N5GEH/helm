@@ -1,0 +1,82 @@
+replicaCount: 3
+
+image:
+  repository: crate
+  pullPolicy: IfNotPresent
+  tag: "4.6.6"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: ClusterIP
+  port: 4200
+
+ingress:
+  enabled: false
+
+resources:
+  limits:
+    memory: 6000Mi
+    cpu: 5
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+extraVolumes:
+  - name: crate-config
+    configMap:
+      name: crate-config
+  - name: crate-logsettings
+    configMap:
+      name: crate-logsettings
+
+extraVolumeMounts:
+  - name: crate-config
+    mountPath: /crate/config/crate.yaml
+    subPath: crate.yaml
+  - name: crate-logsettings
+    mountPath: /crate/config/log4j2.properties
+    subPath: log4j2.properties
+
+initContainer:
+  image: busybox
+  command: ["sysctl", "-w", "vm.max_map_count=262144"]
+  securityContext:
+    privileged: true
+
+containerArgs:
+  - -Cnode.name=${POD_NAME}
+  - -Ccluster.name=${CLUSTER_NAME}
+  - -Ccluster.initial_master_nodes=crate-0,crate-1,crate-2
+  - -Cdiscovery.seed_providers=srv
+  - -Cdiscovery.srv.query=crate-internal-service.${NAMESPACE}.svc.cluster.local
+  - -Cgateway.recover_after_nodes=2
+  - -Cgateway.expected_nodes=${EXPECTED_NODES}
+  - -Cpath.data=/data
+
+env:
+  - name: CRATE_HEAP_SIZE
+    value: "4000m"
+  - name: EXPECTED_NODES
+    value: "3"
+  - name: CLUSTER_NAME
+    value: "my-crate"
+  - name: NAMESPACE
+    valueFrom:
+      fieldRef:
+        fieldPath: metadata.namespace
+
+volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 100Gi
