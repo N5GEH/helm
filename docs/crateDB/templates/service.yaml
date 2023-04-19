@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "crateDB.fullname" . }}-external-service
+  labels:
+    {{- include "crateDB.labels" . | nindent 4 }}
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 4200
+      name: crate-web
+    - port: 5432
+      name: postgres
+  selector:
+    app.kubernetes.io/name: {{ include "crateDB.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "crateDB.fullname" . }}-internal-service
+  labels:
+    {{- include "crateDB.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 4300
+      name: crate-internal
+  selector:
+    app.kubernetes.io/name: {{ include "crateDB.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}

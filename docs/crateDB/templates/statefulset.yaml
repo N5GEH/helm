@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "crateDB.fullname" . }}
+  labels:
+    {{- include "crateDB.labels" . | nindent 4 }}
+spec:
+  serviceName: "crate-set"
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "crateDB.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "crateDB.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "crateDB.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: init-sysctl
+          image: {{ .Values.initContainer.image }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: {{ .Values.initContainer.command }}
+          securityContext:
+            privileged: {{ .Values.initContainer.securityContext.privileged }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args: {{ .Values.containerArgs }}
+          ports:
+            - name: crate-internal
+              containerPort: 4300
+              protocol: TCP
+            - name: crate-web
+              containerPort: 4200
+              protocol: TCP
+            - name: postgres
+              containerPort: 5432
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: crate-web
+          readinessProbe:
+            httpGet:
+              path: /
+              port: crate-web
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
+          env: {{ .Values.env }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+  volumeClaimTemplates:
+    {{- toYaml .Values.volumeClaimTemplates | nindent 2 }}
