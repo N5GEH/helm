@@ -72,10 +72,14 @@ spec:
       volumes:
         - name: crate-config
           configMap:
-            name: {{ include "crateDB.fullname" . }}-config
+            defaultMode: 444
+            name: crate-config
+            optional: false
         - name: crate-logsettings
           configMap:
-            name: {{ include "crateDB.fullname" . }}-logsettings
+            defaultMode: 444
+            name: crate-logsettings
+            optional: false
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
