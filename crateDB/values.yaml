@@ -29,19 +29,21 @@ affinity: {}
 
 extraVolumes:
   - name: crate-config
-    configMap:
-      name: crate-config
-  - name: crate-logsettings
-    configMap:
-      name: crate-logsettings
+    projected:
+      sources:
+        - configMap:
+            name: crate-config
+        - configMap:
+            name: crate-logsettings
 
 extraVolumeMounts:
   - name: crate-config
     mountPath: /crate/config/crate.yaml
     subPath: crate.yaml
-  - name: crate-logsettings
+  - name: crate-config
     mountPath: /crate/config/log4j2.properties
     subPath: log4j2.properties
+
 
 initContainer:
   image: busybox
