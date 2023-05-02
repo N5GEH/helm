@@ -1,6 +1,6 @@
 apiVersion: v2
-name: my-crate
+name: CrateDB
 description: A Helm chart for CrateDB
 type: application
-version: 0.1.0
+version: 0.1.1
 appVersion: 4.6.6
