@@ -67,7 +67,9 @@ spec:
             - name: crate-config
               mountPath: /crate/config/log4j2.properties
               subPath: log4j2.properties
+            {{- if .Values.extraVolumeMounts }}
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
+            {{- end }}
           env: {{ toYaml .Values.env | nindent 12 }}
       volumes:
         - name: crate-config
