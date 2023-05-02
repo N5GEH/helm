@@ -70,10 +70,10 @@ spec:
         - name: crate-config
           projected:
             sources:
-            - configMap:
-                name: {{ include "crateDB.fullname" . }}-config
-            - configMap:
-                name: {{ include "crateDB.fullname" . }}-logsettings
+              - configMap:
+                  name: {{ include "crateDB.fullname" . }}-config
+              - configMap:
+                  name: {{ include "crateDB.fullname" . }}-logsettings
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
