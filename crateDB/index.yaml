@@ -9,6 +9,6 @@ entries:
     name: my-crate
     type: application
     urls:
-    - https://n5geh.github.io/my-crate-helm-chart/my-crate-0.1.0.tgz
+    - https://n5geh.github.io/helm/crateDB/my-crate-0.1.0.tgz
     version: 0.1.0
 generated: "2023-04-19T16:00:01.407175+02:00"
