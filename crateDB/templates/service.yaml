@@ -1,31 +1,22 @@
-apiVersion: v1
 kind: Service
+apiVersion: v1
 metadata:
-  name: {{ include "crateDB.fullname" . }}-external-service
+  name: crate-internal-service
   labels:
-    {{- include "crateDB.labels" . | nindent 4 }}
-spec:
-  type: LoadBalancer
-  ports:
-    - port: 4200
-      name: crate-web
-    - port: 5432
-      name: postgres
-  selector:
+    app: crate
     app.kubernetes.io/name: {{ include "crateDB.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ include "crateDB.fullname" . }}-internal-service
-  labels:
-    {{- include "crateDB.labels" . | nindent 4 }}
 spec:
+  # Create a cluster-internal load balancer.
   type: ClusterIP
   ports:
-    - port: 4300
-      name: crate-internal
+    # Port 4200 for HTTP clients.
+  - port: 4200
+    name: crate-web
+    # Port 5432 for PostgreSQL wire protocol clients.
+  - port: 5432
+    name: postgres
   selector:
+    app: crate
     app.kubernetes.io/name: {{ include "crateDB.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
