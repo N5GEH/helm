@@ -39,7 +39,7 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          args: {{ .Values.containerArgs }}
+          args: {{ toYaml .Values.containerArgs | nindent 12 }}
           ports:
             - name: crate-internal
               containerPort: 4300
