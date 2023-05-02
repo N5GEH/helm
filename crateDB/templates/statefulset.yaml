@@ -62,7 +62,7 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
-          env: {{ .Values.env }}
+          env: {{ toYaml .Values.env | nindent 12 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
