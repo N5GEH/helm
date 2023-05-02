@@ -18,7 +18,7 @@ ingress:
 
 resources:
   limits:
-    memory: 6000Mi
+    memory: 24000Mi
     cpu: 5
 
 nodeSelector: {}
@@ -61,7 +61,7 @@ containerArgs:
 
 env:
   - name: CRATE_HEAP_SIZE
-    value: "4000m"
+    value: "16000m"
   - name: EXPECTED_NODES
     value: "3"
   - name: CLUSTER_NAME
