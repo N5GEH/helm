@@ -61,6 +61,12 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
+            - mountPath: /crate/config/crate.yml
+              name: config-vol
+              subPath: crate.yml
+            - mountPath: /crate/config/log4j2.properties
+              name: logconf-vol
+              subPath: log4j2.properties
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
           env: {{ toYaml .Values.env | nindent 12 }}
       {{- with .Values.nodeSelector }}
