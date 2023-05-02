@@ -62,8 +62,11 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
             - name: crate-config
-              mountPath: /crate/config/
-              readOnly: true
+              mountPath: /crate/config/crate.yml
+              subPath: crate.yml
+            - name: crate-config
+              mountPath: /crate/config/log4j2.properties
+              subPath: log4j2.properties
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
           env: {{ toYaml .Values.env | nindent 12 }}
       volumes:
@@ -71,9 +74,15 @@ spec:
           projected:
             sources:
               - configMap:
-                  name: crate-config
+                  name: {{ include "crateDB.fullname" . }}-config
+                  items:
+                    - key: crate.yml
+                      path: crate.yml
               - configMap:
-                  name: crate-logsettings
+                  name: {{ include "crateDB.fullname" . }}-logsettings
+                  items:
+                    - key: log4j2.properties
+                      path: log4j2.properties
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
