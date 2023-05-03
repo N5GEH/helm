@@ -33,11 +33,11 @@ spec:
           command:
             - {{ .Values.initContainer.command }}
           securityContext:
-            privileged: {{ .Values.initContainer.securityContext.privileged }}
-            {{- with .Values.initContainer.securityContext.seLinuxOptions }}
-            seLinuxOptions:
-              {{- toYaml . | nindent 8 }}
-            {{- end }}
+            - privileged: {{ .Values.initContainer.securityContext.privileged }}
+              {{- with .Values.initContainer.securityContext.seLinuxOptions }}
+              seLinuxOptions:
+                {{- toYaml . | nindent 8 }}
+              {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
