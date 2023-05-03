@@ -1,0 +1,64 @@
+questions:
+  - variable: replicaCount
+    default: "3"
+    description: "Number of replicas for the application"
+    type: "int"
+    label: "Replica Count"
+    group: "Deployment"
+
+  - variable: image.repository
+    default: "myapp/image"
+    description: "Docker image repository for the application"
+    type: "string"
+    label: "Image Repository"
+    group: "Deployment"
+
+  - variable: image.tag
+    default: "4.6.6"
+    description: "Docker image tag for the application"
+    type: "string"
+    label: "Image Tag"
+    group: "Deployment"
+
+  - variable: image.pullPolicy
+    default: "IfNotPresent"
+    description: "Image pull policy for the application"
+    type: "enum"
+    options:
+      - "IfNotPresent"
+      - "Always"
+      - "Never"
+    label: "Image Pull Policy"
+    group: "Deployment"
+
+  - variable: env.CRATE_HEAP_SIZE
+    label: CrateDB Heap Size
+    description: The maximum amount of heap memory allocated to CrateDB JVM.
+    type: string
+    default: "16g"
+    required: true
+    group: "CrateDB Configuration"
+
+  - variable: env.EXPECTED_NODES
+    label: Expected Nodes
+    description: Number of expected nodes in the cluster.
+    type: string
+    default: "3"
+    required: true
+    group: "CrateDB Configuration"
+
+  - variable: env.CLUSTER_NAME
+    label: Cluster Name
+    description: Custom name of your CrateDB-Cluster.
+    type: string
+    default: "my-crate"
+    required: true
+    group: "CrateDB Configuration"
+
+  - variable: volumeClaimTemplates.spec.resources.requests.storage
+    label: Volume size
+    description: Allocated volme size persistent storage.
+    type: string
+    default: "100Gi"
+    required: true
+    group: "CrateDB Configuration"
