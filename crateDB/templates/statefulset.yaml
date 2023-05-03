@@ -31,13 +31,14 @@ spec:
           image: {{ .Values.initContainer.image }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command:
-            {{- toYaml .Values.initContainer.command | indent 6 }}
+          {{- toYaml .Values.initContainer.command | indent 6 }}
           securityContext:
             privileged: {{ .Values.initContainer.securityContext.privileged }}
             {{- with .Values.initContainer.securityContext.seLinuxOptions }}
             seLinuxOptions:
               {{- toYaml . | nindent 8 }}
             {{- end }}
+
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
