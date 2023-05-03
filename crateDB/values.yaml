@@ -56,9 +56,9 @@ initContainer:
       value: "/bin:/sbin:/usr/bin:/usr/sbin"
 
 containerArgs:
-  - -Cnode.name={{ include "crateDB.fullname" . }}-{{ .Values.replicaIndex }}
-  - -Ccluster.initial_master_nodes={{- $releaseName := include "crateDB.fullname" . -}}{{- range $i := until (int .Values.replicaCount) }}{{- if ne $i 0 }},{{- end }}{{ $releaseName }}-{{ $i }}{{- end }}
+  - -Cnode.name={{ include "crateDB.fullname" . }}-{{ .Release.Revision }}
   - -Ccluster.name=${CLUSTER_NAME}
+  - -Ccluster.initial_master_nodes={{- $releaseName := include "crateDB.fullname" . -}}{{- range $i := until (int .Values.replicaCount) -}}{{- if ne $i 0 -}},{{- end -}}{{- $releaseName }}-{{- $i -}}{{- end -}}
   - -Cdiscovery.seed_providers=srv
   - -Cdiscovery.srv.query=crate-internal-service.${NAMESPACE}.svc.cluster.local
   - -Cgateway.recover_after_nodes=2
@@ -76,10 +76,6 @@ env:
     valueFrom:
       fieldRef:
         fieldPath: metadata.namespace
-  - name: replicaIndex
-    valueFrom:
-      fieldRef:
-        fieldPath: metadata.name
 
 volumeClaimTemplates:
   - metadata:
