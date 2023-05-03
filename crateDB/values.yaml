@@ -58,7 +58,7 @@ initContainer:
 containerArgs:
   - -Cnode.name=$(POD_NAME)
   - -Ccluster.name=${CLUSTER_NAME}
-  - -Ccluster.initial_master_nodes=crate-0,crate-1,crate-2
+  - -Ccluster.initial_master_nodes=$(STATEFULSET_NAME)-0,$(STATEFULSET_NAME)-1,$(STATEFULSET_NAME)-2
   - -Cdiscovery.seed_providers=srv
   - -Cdiscovery.srv.query=crate-internal-service.${NAMESPACE}.svc.cluster.local
   - -Cgateway.recover_after_nodes=2
@@ -80,6 +80,10 @@ env:
     valueFrom:
       fieldRef:
         fieldPath: metadata.name
+  - name: STATEFULSET_NAME
+    valueFrom:
+      fieldRef:
+        fieldPath: metadata.labels['statefulset.kubernetes.io/pod-name']
 
 volumeClaimTemplates:
   - metadata:
