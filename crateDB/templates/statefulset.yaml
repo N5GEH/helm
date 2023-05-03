@@ -30,12 +30,13 @@ spec:
         - name: init-sysctl
           image: {{ .Values.initContainer.image }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: {{- toYaml .Values.initContainer.command | nindent 6 }}
+          command:
+            {{- toYaml .Values.initContainer.command | nindent 8 }}
           securityContext:
             privileged: {{ .Values.initContainer.securityContext.privileged }}
             {{- with .Values.initContainer.securityContext.seLinuxOptions }}
             seLinuxOptions:
-              {{- toYaml . | nindent 8 }}
+              {{- toYaml . | nindent 10 }}
             {{- end }}
       containers:
         - name: {{ .Chart.Name }}
