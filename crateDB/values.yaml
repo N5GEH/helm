@@ -44,10 +44,9 @@ extraVolumeMounts:
     mountPath: /crate/config/log4j2.properties
     subPath: log4j2.properties
 
-
 initContainer:
-  image: busybox
-  command: ["sysctl", "-w", "vm.max_map_count=262144"]
+  image: alpine
+  command: ["sh", "-c", "sysctl -w vm.max_map_count=262144"]
   securityContext:
     privileged: true
 
