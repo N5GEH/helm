@@ -30,7 +30,8 @@ spec:
         - name: init-sysctl
           image: {{ .Values.initContainer.image }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: {{ .Values.initContainer.command }}
+          command:
+            - {{ .Values.initContainer.command }}
           securityContext:
             privileged: {{ .Values.initContainer.securityContext.privileged }}
             {{- with .Values.initContainer.securityContext.seLinuxOptions }}
