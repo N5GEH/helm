@@ -8,6 +8,9 @@ spec:
   # Create a cluster-internal load balancer.
   type: ClusterIP
   ports:
+    #inter-node communication
+    - port: 4300
+      name: crate-internal
     # Port 4200 for HTTP clients.
     - port: 4200
       name: crate-web
