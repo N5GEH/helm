@@ -29,6 +29,8 @@ affinity: {}
 
 nodeName: "crate"
 
+fullnameOverride: ""
+
 extraVolumes:
   - name: crate-config
     projected:
