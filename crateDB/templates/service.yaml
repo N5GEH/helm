@@ -15,5 +15,5 @@ spec:
     - port: 5432
       name: postgres
   selector:
-    matchLabels:
-      app: crate
+    app: crate
+    {{- include "crateDB.selectorLabels" . | nindent 4 }}
