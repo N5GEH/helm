@@ -58,9 +58,9 @@ initContainer:
       value: "/bin:/sbin:/usr/bin:/usr/sbin"
 
 containerArgs:
-  - -Cnode.name={{ .Values.nodeName }}-{{ .Release.Revision }}
+  - -Cnode.name={ { template "crate.node.name" . }}
   - -Ccluster.name=${CLUSTER_NAME}
-  - -Ccluster.initial_master_nodes={{- $nodeName := .Values.nodeName -}}{{- $replicas := .Values.replicaCount -}}{{- $masterNodes := "" -}}{{- range $i := until $replicas -}}{{- if ne $i 0 -}},{{- end -}}{{- $masterNodes = printf "%s%s-%d" $masterNodes $nodeName $i -}}{{- end -}}{{- $masterNodes }}
+  - -Ccluster.initial_master_nodes={ { template "crate.initial.master.nodes" . }}
   - -Cdiscovery.seed_providers=srv
   - -Cdiscovery.srv.query=crate-internal-service.${NAMESPACE}.svc.cluster.local
   - -Cgateway.recover_after_nodes=2
