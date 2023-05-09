@@ -39,7 +39,15 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          args: {{ toYaml .Values.containerArgs | nindent 12 }}
+          args:
+          - -Cnode.name={{ include "crate.node.name" . }}
+          - -Ccluster.name=${CLUSTER_NAME}
+          - -Ccluster.initial_master_nodes={{ include "crate.initial.master.nodes" . }}
+          - -Cdiscovery.seed_providers=srv
+          - -Cdiscovery.srv.query=crate-internal-service.${NAMESPACE}.svc.cluster.local
+          - -Cgateway.recover_after_nodes=2
+          - -Cgateway.expected_nodes=${EXPECTED_NODES}
+          - -Cpath.data=/data
           ports:
             - name: crate-internal
               containerPort: 4300
