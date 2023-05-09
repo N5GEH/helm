@@ -62,3 +62,10 @@ questions:
     default: "100Gi"
     required: true
     group: "CrateDB Configuration"
+
+  - variable: nodeName
+    label: Node Name
+    description: The name of the nodes for CrateDB instances.
+    type: string
+    default: "crate"
+    group: "CrateDB Configuration"
