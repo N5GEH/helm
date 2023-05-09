@@ -10,6 +10,7 @@ spec:
   selector:
     matchLabels:
       {{- include "crateDB.selectorLabels" . | nindent 6 }}
+  podManagementPolicy: Parallel
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -21,7 +22,6 @@ spec:
         {{- include "crateDB.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
-      podManagementPolicy: Parallel
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
