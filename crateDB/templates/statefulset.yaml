@@ -9,7 +9,7 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: crate
+      {{- include "crateDB.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -17,6 +17,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
+        app: crate
         {{- include "crateDB.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
@@ -42,6 +43,7 @@ spec:
           args:
           - -Cnode.name={{ include "crate.node.name" . }}
           - -Ccluster.name=${CLUSTER_NAME}
+          - -Ccluster.initial_master_nodes=[crate-0,crate-1,crate-2]
           - -Cdiscovery.seed_providers=srv
           - -Cdiscovery.srv.query=crate-internal-service.${NAMESPACE}.svc.cluster.local
           - -Cgateway.recover_after_nodes=2
