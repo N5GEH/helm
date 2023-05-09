@@ -58,7 +58,7 @@ initContainer:
 containerArgs:
   - -Cnode.name={{ include "crateDB.fullname" . }}-{{ .Release.Revision }}
   - -Ccluster.name=${CLUSTER_NAME}
-  -Ccluster.initial_master_nodes={{- $name := include "crateDB.fullname" . }}{{- $replicas := .Values.replicaCount }}{{- $releaseRevision := .Release.Revision }}{{- $masterNodes := "" }}{{- range $i, $e := until $replicas }}{{- $masterNodes = printf "%s%s-%d," $masterNodes $name (add $releaseRevision $i) }}{{- end }}{{- trimSuffix "," $masterNodes }}
+  - -Ccluster.initial_master_nodes={{- $name := include "crateDB.fullname" . }}{{- $replicas := .Values.replicaCount }}{{- $releaseRevision := .Release.Revision }}{{- $masterNodes := "" }}{{- range $i, $e := until $replicas }}{{- $masterNodes = printf "%s%s-%d," $masterNodes $name (add $releaseRevision $i) }}{{- end }}{{- trimSuffix "," $masterNodes }}
   - -Cdiscovery.seed_providers=srv
   - -Cdiscovery.srv.query=crate-internal-service.${NAMESPACE}.svc.cluster.local
   - -Cgateway.recover_after_nodes=2
