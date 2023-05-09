@@ -21,6 +21,7 @@ spec:
         {{- include "crateDB.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
+      podManagementPolicy: Parallel
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
