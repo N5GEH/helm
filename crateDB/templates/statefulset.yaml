@@ -9,7 +9,7 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "crateDB.selectorLabels" . | nindent 6 }}
+      app: crate
   template:
     metadata:
       {{- with .Values.podAnnotations }}
