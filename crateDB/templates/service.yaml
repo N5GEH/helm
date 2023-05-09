@@ -9,11 +9,11 @@ spec:
   type: ClusterIP
   ports:
     # Port 4200 for HTTP clients.
-  - port: 4200
-    name: crate-web
+    - port: 4200
+      name: crate-web
     # Port 5432 for PostgreSQL wire protocol clients.
-  - port: 5432
-    name: postgres
+    - port: 5432
+      name: postgres
   selector:
-    app: crate
-    {{- include "crateDB.selectorLabels" . | nindent 6 }}
+    matchLabels:
+      app: crate
