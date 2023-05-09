@@ -1,7 +1,5 @@
 replicaCount: 3
 
-nodeName: "crate"
-
 image:
   repository: crate
   pullPolicy: IfNotPresent
@@ -28,6 +26,8 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+nodeName: "crate"
 
 extraVolumes:
   - name: crate-config
