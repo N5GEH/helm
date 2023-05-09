@@ -11,6 +11,20 @@ spec:
     #inter-node communication
     - port: 4300
       name: crate-internal
+  selector:
+    app: crate
+    {{- include "crateDB.selectorLabels" . | nindent 4 }}
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: crate-external-service
+  labels:
+    {{- include "crateDB.labels" . | nindent 4 }}
+spec:
+  # Create a cluster-internal load balancer.
+  type: ClusterIP
+  ports:
     # Port 4200 for HTTP clients.
     - port: 4200
       name: crate-web

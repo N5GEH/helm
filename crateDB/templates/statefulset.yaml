@@ -41,8 +41,9 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           args:
-          - -Cnode.name={{ include "crate.node.name" . }}
+          - -Cnode.name={{ include "crateDB.fullname" . }}
           - -Ccluster.name=${CLUSTER_NAME}
+          - -Ccluster.initial_master_nodes=[crate-0,crate-1,crate-2]
           - -Cdiscovery.seed_providers=srv
           - -Cdiscovery.srv.query=crate-internal-service.${NAMESPACE}.svc.cluster.local
           - -Cgateway.recover_after_nodes=2
