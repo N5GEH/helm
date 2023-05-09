@@ -1,5 +1,7 @@
 replicaCount: 3
 
+nodeName: "crate"
+
 image:
   repository: crate
   pullPolicy: IfNotPresent
