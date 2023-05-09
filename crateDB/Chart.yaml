@@ -2,5 +2,5 @@ apiVersion: v2
 name: cratedb
 description: A Helm chart for CrateDB
 type: application
-version: 0.2.29
+version: 0.2.30
 appVersion: 4.6.6

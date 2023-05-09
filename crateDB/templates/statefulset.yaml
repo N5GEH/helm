@@ -75,7 +75,14 @@ spec:
               mountPath: /crate/config/
               readOnly: true
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
-          env: {{ toYaml .Values.env | nindent 12 }}
+          env:
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: MY_POD_INDEX
+              value: "{{ "{{" }} index (split \"-\" (env \"MY_POD_NAME\")) 1 }}"
+            {{- toYaml .Values.env | nindent 8 }}
       volumes:
         - name: crate-config
           projected:
